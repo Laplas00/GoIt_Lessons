@@ -33,7 +33,6 @@ def phone(string):
 
 def main():
 
-    # ====================================================================
     commands = {
         'add': add_contact,
         'change': change,
@@ -44,7 +43,6 @@ def main():
         'break', 'quit', 'stop',
         'exit', 'good bye', 'close', 'q'
     ]
-# ====================================================================
 
     print("\n{:_^50}\n|".format('CACTUS'))
     process = True
