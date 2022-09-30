@@ -42,6 +42,7 @@ def get_birthday_per_week(users_list):
         cur_day = date.today().day
         birthday = date(cur_year, Month, Day)
         if Month != current_month:
+            print(current_month)
             print("***")
             continue
 
@@ -59,16 +60,11 @@ def get_birthday_per_week(users_list):
                 ind = weeks_list.index(week)
                 pre_week = weeks_list[ind-1]
                 working_week = pre_week[-2:]+cur_week[0:-2]
-
                 if Day not in working_week:
                     print("Not this time")
                     continue
 
-                print(f"Сurrent week - {cur_week}")
-                print(f"Previos week - {pre_week}")
-                print(f"Working week - {working_week}")
-
-                if Day in working_week[0:2]:
+                elif Day in working_week[0:2]:
                     if 'Monday' in result:
                         result['Monday'].append(person['name'])
                     else:
@@ -89,7 +85,7 @@ def get_birthday_per_week(users_list):
         for day in result:
             print(f"{day}: {', '.join(result[day])}")
 
-        return "DONE!"
+    return "DONE!"
 
 
 print(get_birthday_per_week(users))
