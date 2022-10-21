@@ -7,22 +7,6 @@ class Field:
     pass
 
 
-class Iteration(UserDict):
-    N = 4
-
-    def __init__(self):
-
-        self.cur = 0
-
-    def __next__(self):
-        print('next')
-        if self.cur < self.N:
-            print('<<')
-            self.cur += 1
-            return self.cur
-        raise StopIteration
-
-
 class Name(Field):
     def __init__(self, name):
         self.value = name
@@ -34,8 +18,13 @@ class Phone(Field):
 
 
 class AdressBook(UserDict):
-    N = 3
+    N = 0
+    cur = 0
     all_values = []
+
+    def __init__(self):
+        super().__init__()
+        self.book = []
 
     def in_data(self, name):
         if name in self.data:
@@ -45,32 +34,26 @@ class AdressBook(UserDict):
     def add_record(self, record):
         self.data[record.name.value] = record
 
-    def show_all(self):
-        print(self.data)
-
     def iteration(self, count):
+        self.N += count
 
-        print('v iter')
-        self.N = count
+        for name, value in self.data.items():
+            for value in self.data[name].phones:
+                self.book.append(value.value)
 
-        for i in self.data:
-            for di in self.data[i].phones:
-                self.all_values.append(di)
-
-        book = (x.value for x in self.all_values)
-
-        for i in book:
-            print(i)
-
-        # for name, keys in self.data.items():
-        #     for value in keys.phones:
-        #         print(value.value)
-        # return 'Done'
+    def __next__(self):
+        if self.cur < self.N:
+            self.cur += 1
+            return self.book[self.cur]
+        else:
+            raise StopIteration
 
 
 class Record(Field):
+
     def __init__(self, in_name, in_phone=None):
-        self.now = 0
+        self.cur = 0
+        self.N = 3
         self.name = Name(in_name)
         self.phones = []
         if in_phone != None:
@@ -89,15 +72,3 @@ class Record(Field):
         for old in self.phones:
             if old.value == phone:
                 self.phones.remove(old)
-
-    def __next__(self):
-        print('0123123123123123123123123123123123')
-        yield self
-
-    # def __next__(self):
-    #     print('NEEEEEXT')
-    #     if self.now < self.N:
-    #         self.now += 1
-    #         return self.now
-    #     else:
-    #         return StopIteration

@@ -63,13 +63,16 @@ def remove(string):
     return False
 
 
-COMMANDS = {
-    'add':  add_contact,
-    'remove':  remove,
-    'add phone': add_phone,
-    'show': show_person,
-    'change': change_phone,
-}
+@input_error
+def all_notes(count):
+    count = int(count)
+    adress_book.iteration(count)
+
+    for _ in range(count):
+        print(next(adress_book))
+
+#################################
+#             test              #
 
 
 add_contact('bogdan 39084')
@@ -86,11 +89,23 @@ add_phone('maks manka')
 add_phone('maks oplet')
 add_phone('maks dibil')
 
+##################################
+
+COMMANDS = {
+    'add':  add_contact,
+    'remove':  remove,
+    'add phone': add_phone,
+    'show': show_person,
+    'change': change_phone,
+    'all': all_notes
+}
+
 
 def main():
     print('> Hello user\nI have this commands:')
     print('-add [name phone]\n-change [name phone new_phone]\n-remove [name phone]')
-    print('-add phone [name phone]\n-show [name]\n-show all')
+    print(
+        '-add phone [name phone]\n-show [name]\n-show all\n-all [num of notes]')
 
     while True:
         u_input = input('∞ ').rstrip().lstrip()
@@ -104,9 +119,7 @@ def main():
             print('> How can i halp u?')
 
         elif u_input == 'show all':
-            page = 4
-
-            print(adress_book.iteration(page))
+            print(adress_book.data)
 
         elif u_input == 'clear':
             system('clear')
@@ -114,6 +127,7 @@ def main():
         elif u_input in COMMANDS:
             string = input('Command args: ')
             command = COMMANDS[u_input]
+
             if command(string) == True:
                 print('> Done!')
 
