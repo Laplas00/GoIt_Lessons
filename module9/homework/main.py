@@ -31,6 +31,9 @@ def phone(string):
     print(contact[string[0]])
 
 
+
+
+
 def main():
 
     commands = {
