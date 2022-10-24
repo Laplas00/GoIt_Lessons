@@ -110,7 +110,6 @@ def days_to_birthday(string):
 def save_data():
     with open('data.bin', 'wb') as file_in:
         pickle.dump(adress_book.data, file_in)
-    print('lalala')
 
 
 def unpacking_data():
