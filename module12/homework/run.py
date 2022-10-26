@@ -57,7 +57,7 @@ def change_phone(string):
     return True
 
 
-# @input_error
+@input_error
 def show_person(string):
     if adress_book.in_data(string):
         for i in adress_book.data[string].phones:
