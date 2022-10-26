@@ -30,7 +30,7 @@ class Phone(Field):
 
 class Birthday(Field):
     def __init__(self, arg):
-        if arg != None:
+        if arg:
             day, month, year = arg.split('.')
             self.value = date(day=int(day), month=int(month), year=int(year))
         else:
@@ -46,10 +46,18 @@ class AdressBook(UserDict):
         super().__init__()
         self.book = []
 
+    @property
+    def save_data(self):
+        with open('data.bin', 'wb') as file_in:
+            pickle.dump(self.data, file_in)
+
+    @property
+    def unpacking_data(self):
+        with open('data.bin', 'rb') as file_out:
+            self.data = pickle.load(file_out)
+
     def in_data(self, name):
-        if name in self.data:
-            return True
-        return False
+        return name in self.data
 
     def add_record(self, record):
         self.data[record.name.value] = record
@@ -61,21 +69,6 @@ class AdressBook(UserDict):
             for value in self.data[name].phones:
                 self.book.append(value.value)
 
-    def days_to_birthday(self, record):
-
-        self.cur_date = date.today()
-        self.brt = record.brt.value
-
-        if self.cur_date.month < record.brt.value.month:
-            self.delta_days = date(
-                day=int(self.brth.day), month=int(self.brth.month), year=int(self.cur_date.year))
-            return (self.delta_days - self.cur_date).days
-
-        else:
-            self.delta_days = date(
-                day=int(record.brt.value.day), month=int(record.brt.value.month), year=int(self.cur_date.year)+1)
-            return (self.delta_days - self.cur_date).days
-
     def __next__(self):
         if self.cur < self.N:
             self.cur += 1
@@ -85,7 +78,6 @@ class AdressBook(UserDict):
 
 
 class Record(Field):
-
     def __init__(self, in_name, in_phone=None, birthsday=None):
         self.cur = 0
         self.N = 3
@@ -100,7 +92,16 @@ class Record(Field):
         self.brt = Birthday(date)
 
     def days_to_birthday(self):
-        pass
+        self.cur_date = date.today()
+        if self.cur_date.month < self.brt.value.month:
+            self.delta_days = date(
+                day=int(self.brth.day), month=int(self.brth.month), year=int(self.cur_date.year))
+            return (self.delta_days - self.cur_date).days
+
+        else:
+            self.delta_days = date(
+                day=int(self.brt.value.day), month=int(self.brt.value.month), year=int(self.cur_date.year)+1)
+            return (self.delta_days - self.cur_date).days
 
     def add_phone(self, phone=None):
         self.phones.append(Phone(phone))

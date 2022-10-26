@@ -57,16 +57,18 @@ def change_phone(string):
     return True
 
 
-@input_error
+# @input_error
 def show_person(string):
-    person = adress_book.data[string]
-    for i in adress_book.data[string].phones:
-        print(f'- {i.value}')
+    if adress_book.in_data(string):
+        for i in adress_book.data[string].phones:
+            print(f'- {i.value}')
 
-    if person.brt.value != None:
-        print(person.brt.value)
+        if adress_book.data[string].brt.value != None:
+            print(adress_book.data[string].brt.value)
 
-    return True
+        return True
+    else:
+        return False
 
 
 @input_error
@@ -97,24 +99,26 @@ def add_brt(string):
 @input_error
 def days_to_birthday(string):
     if adress_book.in_data(string):
-        if adress_book.data[string].brt.value == None:
+        record = adress_book.data[string]
+        if record.brt.value == None:
             return f'{string} have no birthday'
-        record = adress_book[string]
-        print('start')
-        print(adress_book.days_to_birthday(record))
-        return True
+
+        else:
+            record = adress_book[string]
+            print(f'Days to birthday: {record.days_to_birthday()}')
+            return True
+
+    return False
 
 
 #  =========   Pickle data  =========   #
 
 def save_data():
-    with open('data.bin', 'wb') as file_in:
-        pickle.dump(adress_book.data, file_in)
+    adress_book.save_data
 
 
 def unpacking_data():
-    with open('data.bin', 'rb') as file_out:
-        return pickle.load(file_out)
+    adress_book.unpacking_data
 
 #  =========   Pickle data  =========   #
 
@@ -127,30 +131,6 @@ def all_notes(count):
     for _ in range(count):
         print(next(adress_book))
 
-#################################
-#             test              #
-
-
-add_contact('bogdan 39084')
-add_phone('bogdan 45555')
-add_phone('bogdan 44444')
-add_phone('bogdan 33333')
-add_phone('bogdan 22222')
-add_phone('bogdan 00000')
-add_brt('bogdan 03.09.2002')
-
-add_contact('maks lopata')
-add_phone('maks kuskus')
-add_phone('maks luci')
-add_phone('maks manka')
-add_phone('maks oplet')
-add_phone('maks dibil')
-
-add_contact('sasha pupsik 14.08.2003')
-add_phone('sasha love')
-
-
-##################################
 
 COMMANDS = {
     'add':  add_contact,
@@ -167,7 +147,7 @@ COMMANDS = {
 
 def main():
 
-    adress_book.data = unpacking_data()
+    unpacking_data()
 
     print(
         '> Hello user\nI have this commands:\n')
